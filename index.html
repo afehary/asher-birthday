@@ -53,6 +53,7 @@
                                 x-text="event.title"
                             ></h3>
                             <p
+                                x-show="!isExpanded(index)"
                                 :class="{'text-gray-400': event.status === 'completed'}"
                                 class="text-sm text-gray-600 mt-1"
                                 x-text="event.description"
