@@ -57,6 +57,20 @@
             50% { opacity: 0.6; }
         }
 
+        /* Ongoing event glow */
+        .ongoing-glow {
+            animation: glowPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), 0 0 30px rgba(251, 191, 36, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(251, 191, 36, 0.5), 0 0 50px rgba(251, 191, 36, 0.2);
+            }
+        }
+
         /* Fade in animation for cards */
         .fade-in-up {
             animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -117,7 +131,7 @@
                     @click="toggleExpand(index)"
                     :class="{
                         'bg-green-50 border-green-400': event.status === 'completed',
-                        'bg-amber-50 border-amber-400 ring-2 ring-amber-300': event.status === 'ongoing',
+                        'bg-amber-50 border-amber-400 ongoing-glow': event.status === 'ongoing',
                         'bg-white/90 border-gray-200 backdrop-blur-sm': event.status === 'pending'
                     }"
                     class="event-card fade-in-up border-2 rounded-2xl p-5 cursor-pointer select-none shadow-sm"
@@ -186,18 +200,18 @@
                         <template x-for="(subEvent, subIndex) in event.subEvents" :key="subIndex">
                             <div
                                 :class="{
-                                    'bg-gray-100 text-gray-400': event.status === 'completed',
-                                    'bg-white/60 text-gray-700': event.status !== 'completed'
+                                    'text-gray-400': event.status === 'completed',
+                                    'text-gray-700': event.status !== 'completed'
                                 }"
-                                class="flex items-center gap-3 text-sm px-3 py-2 rounded-xl"
+                                class="flex items-center gap-3 text-sm py-1.5"
                             >
                                 <span
                                     :class="{
                                         'bg-gray-300 text-gray-500': event.status === 'completed',
                                         'bg-teal-500 text-white': event.status === 'ongoing',
-                                        'bg-gray-200 text-gray-500': event.status === 'pending'
+                                        'bg-gray-400 text-white': event.status === 'pending'
                                     }"
-                                    class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold"
+                                    class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold"
                                     x-text="subIndex + 1"
                                 ></span>
                                 <span x-text="subEvent"></span>
