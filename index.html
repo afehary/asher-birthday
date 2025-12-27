@@ -17,7 +17,6 @@
         <header class="text-center py-6">
             <h1 class="text-3xl font-bold text-pink-600">Asher Turns ONE</h1>
             <p class="text-gray-600 mt-1">🎂 Birthday Celebration 🎈</p>
-            <p class="text-sm text-gray-400 mt-2" x-show="!isAdmin">Live updates every 3 seconds</p>
         </header>
 
         <!-- Admin Badge -->
@@ -29,12 +28,13 @@
         <div class="space-y-3">
             <template x-for="(event, index) in events" :key="index">
                 <div
+                    @click="toggleExpand(index)"
                     :class="{
                         'bg-green-100 border-green-400': event.status === 'completed',
                         'bg-yellow-100 border-yellow-400 ring-2 ring-yellow-400': event.status === 'ongoing',
                         'bg-white border-gray-200': event.status === 'pending'
                     }"
-                    class="border-2 rounded-xl p-4 transition-all duration-300"
+                    class="border-2 rounded-xl p-4 transition-all duration-300 cursor-pointer select-none"
                 >
                     <!-- Main Event Row -->
                     <div class="flex items-start gap-3">
@@ -45,30 +45,13 @@
                             <span x-show="event.status === 'pending'" class="text-2xl">⏳</span>
                         </div>
 
-                        <!-- Event Content (clickable to expand) -->
-                        <div
-                            class="flex-1 cursor-pointer select-none"
-                            @click="toggleExpand(index)"
-                        >
-                            <div class="flex items-center gap-2">
-                                <h3
-                                    :class="{'line-through text-gray-400': event.status === 'completed'}"
-                                    class="font-semibold text-lg"
-                                    x-text="event.title"
-                                ></h3>
-                                <!-- Expand/Collapse Chevron -->
-                                <span
-                                    x-show="!isAdmin"
-                                    :class="{'rotate-180': isExpanded(index)}"
-                                    class="text-gray-400 transition-transform duration-200 text-sm"
-                                >▼</span>
-                            </div>
-                            <p
-                                x-show="event.subEvents && event.subEvents.length"
-                                :class="{'text-gray-400': event.status === 'completed'}"
-                                class="text-xs text-gray-500 mt-1"
-                                x-text="isExpanded(index) ? '' : event.subEvents.length + ' activities'"
-                            ></p>
+                        <!-- Event Content -->
+                        <div class="flex-1">
+                            <h3
+                                :class="{'line-through text-gray-400': event.status === 'completed'}"
+                                class="font-semibold text-lg"
+                                x-text="event.title"
+                            ></h3>
                         </div>
 
                         <!-- Admin Controls -->
