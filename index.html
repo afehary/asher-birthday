@@ -150,9 +150,43 @@
         .bg-balloons span:nth-child(6) { top: 75%; left: 65%; }
         .bg-balloons span:nth-child(7) { top: 85%; left: 35%; }
         .bg-balloons span:nth-child(8) { top: 25%; left: 50%; }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+        .confetti.burst {
+            animation: confettiFall 3s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen" style="background: linear-gradient(135deg, #79C9C5 0%, #FFE2AF 50%, #3F9AAE 100%);">
+    <!-- Confetti container -->
+    <div class="confetti-container" id="confetti-container"></div>
+
     <!-- Background balloons pattern -->
     <div class="bg-balloons">
         <span>🎈</span><span>🎈</span><span>🎈</span><span>🎈</span>
@@ -619,6 +653,50 @@
                 }
             };
         }
+
+        // Confetti burst function
+        const confettiColors = ['#3F9AAE', '#79C9C5', '#FFE2AF', '#FF6B6B', '#4ECDC4', '#FFD93D', '#6BCB77'];
+        const confettiShapes = ['●', '■', '▲', '★', '♦'];
+
+        function createConfettiBurst() {
+            const container = document.getElementById('confetti-container');
+            const burstX = Math.random() * window.innerWidth;
+            const particleCount = 15 + Math.floor(Math.random() * 10);
+
+            for (let i = 0; i < particleCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.textContent = confettiShapes[Math.floor(Math.random() * confettiShapes.length)];
+                confetti.style.left = burstX + (Math.random() - 0.5) * 100 + 'px';
+                confetti.style.top = '-20px';
+                confetti.style.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                confetti.style.fontSize = (10 + Math.random() * 15) + 'px';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+
+                container.appendChild(confetti);
+
+                // Trigger animation
+                setTimeout(() => confetti.classList.add('burst'), 10);
+
+                // Clean up after animation
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // Trigger confetti every 8-15 seconds
+        function scheduleConfetti() {
+            const delay = 8000 + Math.random() * 7000;
+            setTimeout(() => {
+                createConfettiBurst();
+                scheduleConfetti();
+            }, delay);
+        }
+
+        // Start confetti after page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(scheduleConfetti, 3000);
+        });
     </script>
 </body>
 </html>
