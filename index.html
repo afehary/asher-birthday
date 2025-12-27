@@ -197,12 +197,11 @@
     </style>
 
     <script>
-        const STORAGE_KEY = 'asher_birthday_events';
         const ADMIN_PIN = '1212';
 
-        // JSONBlob API endpoint - will be set after creating blob
-        let BLOB_URL = null;
-        const BLOB_ID_KEY = 'asher_blob_id';
+        // Fixed JSONBlob ID - shared by all users
+        const BLOB_ID = '019b5dee-ba4a-73f4-bb6b-51e025c9aa86';
+        const BLOB_URL = `https://jsonblob.com/api/jsonBlob/${BLOB_ID}`;
 
         function eventApp() {
             return {
@@ -298,53 +297,9 @@
                 pollInterval: null,
 
                 async init() {
-                    // Check for stored blob ID or create new one
-                    await this.initStorage();
                     await this.loadState();
                     this.loading = false;
-
-                    // Start polling for guests (non-admin)
                     this.startPolling();
-                },
-
-                async initStorage() {
-                    // Check if we have a blob ID stored
-                    let blobId = localStorage.getItem(BLOB_ID_KEY);
-
-                    if (!blobId) {
-                        // Create new blob
-                        try {
-                            const response = await fetch('https://jsonblob.com/api/jsonBlob', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ events: this.events })
-                            });
-
-                            // Get blob ID from Location header
-                            const location = response.headers.get('Location');
-                            blobId = location.split('/').pop();
-                            localStorage.setItem(BLOB_ID_KEY, blobId);
-
-                            // Also store in URL for sharing
-                            const url = new URL(window.location);
-                            url.searchParams.set('id', blobId);
-                            window.history.replaceState({}, '', url);
-                        } catch (e) {
-                            console.error('Failed to create blob:', e);
-                            // Fall back to localStorage only
-                            return;
-                        }
-                    }
-
-                    // Check URL for blob ID (for shared links)
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const urlBlobId = urlParams.get('id');
-                    if (urlBlobId) {
-                        blobId = urlBlobId;
-                        localStorage.setItem(BLOB_ID_KEY, blobId);
-                    }
-
-                    BLOB_URL = `https://jsonblob.com/api/jsonBlob/${blobId}`;
                 },
 
                 async loadState() {
