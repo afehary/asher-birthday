@@ -306,32 +306,31 @@
                 },
 
                 async loadState() {
-                    if (BLOB_URL) {
-                        try {
-                            const response = await fetch(BLOB_URL);
-                            if (response.ok) {
-                                const data = await response.json();
-                                if (data.events) {
-                                    this.events = data.events;
-                                }
+                    try {
+                        // Add cache-busting to prevent stale data
+                        const response = await fetch(`${BLOB_URL}?_=${Date.now()}`, {
+                            cache: 'no-store'
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.events) {
+                                this.events = data.events;
                             }
-                        } catch (e) {
-                            console.error('Failed to load state:', e);
                         }
+                    } catch (e) {
+                        console.error('Failed to load state:', e);
                     }
                 },
 
                 async saveState() {
-                    if (BLOB_URL) {
-                        try {
-                            await fetch(BLOB_URL, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ events: this.events })
-                            });
-                        } catch (e) {
-                            console.error('Failed to save state:', e);
-                        }
+                    try {
+                        await fetch(BLOB_URL, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ events: this.events })
+                        });
+                    } catch (e) {
+                        console.error('Failed to save state:', e);
                     }
                 },
 
