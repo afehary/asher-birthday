@@ -52,6 +52,11 @@
                                 class="font-semibold text-lg"
                                 x-text="event.title"
                             ></h3>
+                            <p
+                                :class="{'text-gray-400': event.status === 'completed'}"
+                                class="text-sm text-gray-600 mt-1"
+                                x-text="event.description"
+                            ></p>
                         </div>
 
                         <!-- Admin Controls -->
@@ -203,6 +208,7 @@
                 events: [
                     {
                         title: "Welcome & Opening Prayer",
+                        description: "MC welcomes guests, introductions, opening prayer",
                         status: "pending",
                         subEvents: [
                             "MC welcomes guests",
@@ -212,6 +218,7 @@
                     },
                     {
                         title: "Baby's Growth Video",
+                        description: "Slideshow of pregnancy, milestones, first steps",
                         status: "pending",
                         subEvents: [
                             "Pregnancy / newborn days",
@@ -222,6 +229,7 @@
                     },
                     {
                         title: "Fun Icebreaker",
+                        description: "Games and trivia with prizes",
                         status: "pending",
                         subEvents: [
                             "Guess Baby's Age using photos",
@@ -231,6 +239,7 @@
                     },
                     {
                         title: "Refreshments Break",
+                        description: "Small chops, fruits, mingling, candid photos",
                         status: "pending",
                         subEvents: [
                             "Small chops & fruits served",
@@ -241,6 +250,7 @@
                     },
                     {
                         title: "Cake Cutting Ceremony",
+                        description: "Birthday song, cake cutting, wishes, photos",
                         status: "pending",
                         subEvents: [
                             "Birthday song",
@@ -251,6 +261,7 @@
                     },
                     {
                         title: "Games & Entertainment",
+                        description: "Dance moments, challenges, competitions",
                         status: "pending",
                         subEvents: [
                             "Toddler-friendly dance moment",
@@ -260,6 +271,7 @@
                     },
                     {
                         title: "Closing Remarks",
+                        description: "Thank-you by parents, appreciation to guests",
                         status: "pending",
                         subEvents: [
                             "Thank-you by parents",
@@ -268,6 +280,7 @@
                     },
                     {
                         title: "Final Photos & Wind Down",
+                        description: "Family photos, guests say goodbye",
                         status: "pending",
                         subEvents: [
                             "Family photos",
