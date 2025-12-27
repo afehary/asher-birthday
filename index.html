@@ -36,6 +36,7 @@
                     }"
                     class="border-2 rounded-xl p-4 transition-all duration-300"
                 >
+                    <!-- Main Event Row -->
                     <div class="flex items-start gap-3">
                         <!-- Status Icon -->
                         <div class="flex-shrink-0 mt-1">
@@ -44,17 +45,29 @@
                             <span x-show="event.status === 'pending'" class="text-2xl">⏳</span>
                         </div>
 
-                        <!-- Event Content -->
-                        <div class="flex-1">
-                            <h3
-                                :class="{'line-through text-gray-400': event.status === 'completed'}"
-                                class="font-semibold text-lg"
-                                x-text="event.title"
-                            ></h3>
+                        <!-- Event Content (clickable to expand) -->
+                        <div
+                            class="flex-1 cursor-pointer select-none"
+                            @click="toggleExpand(index)"
+                        >
+                            <div class="flex items-center gap-2">
+                                <h3
+                                    :class="{'line-through text-gray-400': event.status === 'completed'}"
+                                    class="font-semibold text-lg"
+                                    x-text="event.title"
+                                ></h3>
+                                <!-- Expand/Collapse Chevron -->
+                                <span
+                                    x-show="!isAdmin"
+                                    :class="{'rotate-180': isExpanded(index)}"
+                                    class="text-gray-400 transition-transform duration-200 text-sm"
+                                >▼</span>
+                            </div>
                             <p
+                                x-show="event.subEvents && event.subEvents.length"
                                 :class="{'text-gray-400': event.status === 'completed'}"
-                                class="text-sm text-gray-600 mt-1"
-                                x-text="event.description"
+                                class="text-xs text-gray-500 mt-1"
+                                x-text="isExpanded(index) ? '' : event.subEvents.length + ' activities'"
                             ></p>
                         </div>
 
@@ -62,26 +75,48 @@
                         <div x-show="isAdmin" class="flex-shrink-0">
                             <button
                                 x-show="event.status === 'pending'"
-                                @click="startEvent(index)"
+                                @click.stop="startEvent(index)"
                                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold text-sm active:scale-95 transition-transform"
                             >
                                 START
                             </button>
                             <button
                                 x-show="event.status === 'ongoing'"
-                                @click="completeEvent(index)"
+                                @click.stop="completeEvent(index)"
                                 class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm active:scale-95 transition-transform"
                             >
                                 DONE
                             </button>
                             <button
                                 x-show="event.status === 'completed'"
-                                @click="resetEvent(index)"
+                                @click.stop="resetEvent(index)"
                                 class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg text-sm active:scale-95 transition-transform"
                             >
                                 ↩️
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Sub-Events (expandable) -->
+                    <div
+                        x-show="isExpanded(index)"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="mt-3 ml-9 space-y-2"
+                    >
+                        <template x-for="(subEvent, subIndex) in event.subEvents" :key="subIndex">
+                            <div
+                                :class="{
+                                    'text-gray-400': event.status === 'completed',
+                                    'text-gray-700': event.status !== 'completed'
+                                }"
+                                class="flex items-start gap-2 text-sm"
+                            >
+                                <span class="text-xs mt-0.5">•</span>
+                                <span x-text="subEvent"></span>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </template>
@@ -183,15 +218,81 @@
         function eventApp() {
             return {
                 events: [
-                    { title: "Welcome & Opening Prayer", description: "MC welcomes guests, introductions, opening prayer", status: "pending" },
-                    { title: "Baby's Growth Video", description: "Slideshow of pregnancy, milestones, first smile, crawl, steps", status: "pending" },
-                    { title: "Fun Icebreaker", description: "Guess Baby's Age game or Baby Trivia with prizes", status: "pending" },
-                    { title: "Refreshments Break", description: "Small chops, fruits, mingling, candid photos", status: "pending" },
-                    { title: "Cake Cutting Ceremony", description: "Birthday song, cake cutting, wishes, photos", status: "pending" },
-                    { title: "Games & Entertainment", description: "Dance moments, MC dance challenge, competitions", status: "pending" },
-                    { title: "Closing Remarks", description: "Thank-you by parents, appreciation to guests", status: "pending" },
-                    { title: "Final Photos & Wind Down", description: "Family photos, guests say goodbye", status: "pending" }
+                    {
+                        title: "Welcome & Opening Prayer",
+                        status: "pending",
+                        subEvents: [
+                            "MC welcomes guests",
+                            "Everyone shares name & relationship to Asher",
+                            "Short opening prayer"
+                        ]
+                    },
+                    {
+                        title: "Baby's Growth Video",
+                        status: "pending",
+                        subEvents: [
+                            "Pregnancy / newborn days",
+                            "Monthly milestones",
+                            "First smile, crawl, steps",
+                            "Happy 1st Birthday finale!"
+                        ]
+                    },
+                    {
+                        title: "Fun Icebreaker",
+                        status: "pending",
+                        subEvents: [
+                            "Guess Baby's Age using photos",
+                            "Baby Trivia (first word, favorite food, birth time)",
+                            "Prizes for winners"
+                        ]
+                    },
+                    {
+                        title: "Refreshments Break",
+                        status: "pending",
+                        subEvents: [
+                            "Small chops & fruits served",
+                            "Guests mingle",
+                            "Background music",
+                            "Candid photos"
+                        ]
+                    },
+                    {
+                        title: "Cake Cutting Ceremony",
+                        status: "pending",
+                        subEvents: [
+                            "Birthday song",
+                            "Parents help Asher cut cake",
+                            "Wishes from guests",
+                            "Photo moment"
+                        ]
+                    },
+                    {
+                        title: "Games & Entertainment",
+                        status: "pending",
+                        subEvents: [
+                            "Toddler-friendly dance moment",
+                            "MC-led mini dance challenge",
+                            "Fun competitions"
+                        ]
+                    },
+                    {
+                        title: "Closing Remarks",
+                        status: "pending",
+                        subEvents: [
+                            "Thank-you by parents",
+                            "Appreciation to all guests"
+                        ]
+                    },
+                    {
+                        title: "Final Photos & Wind Down",
+                        status: "pending",
+                        subEvents: [
+                            "Family photos",
+                            "Guests say goodbye"
+                        ]
+                    }
                 ],
+                expandedIndex: null,
                 isAdmin: false,
                 showPinModal: false,
                 pin: '',
@@ -303,6 +404,19 @@
 
                 logout() {
                     this.isAdmin = false;
+                },
+
+                toggleExpand(index) {
+                    if (this.expandedIndex === index) {
+                        this.expandedIndex = null;
+                    } else {
+                        this.expandedIndex = index;
+                    }
+                },
+
+                isExpanded(index) {
+                    // Auto-expand ongoing events, or manually expanded
+                    return this.events[index].status === 'ongoing' || this.expandedIndex === index;
                 },
 
                 async startEvent(index) {
