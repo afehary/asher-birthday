@@ -300,37 +300,52 @@
                 pollInterval: null,
 
                 async init() {
+                    console.log('🚀 App initializing...');
+                    console.log('📡 BLOB_URL:', BLOB_URL);
                     await this.loadState();
                     this.loading = false;
                     this.startPolling();
+                    console.log('✅ App initialized');
                 },
 
                 async loadState() {
+                    const url = `${BLOB_URL}?_=${Date.now()}`;
+                    console.log('📥 Loading state from:', url);
                     try {
-                        // Add cache-busting to prevent stale data
-                        const response = await fetch(`${BLOB_URL}?_=${Date.now()}`, {
+                        const response = await fetch(url, {
                             cache: 'no-store'
                         });
+                        console.log('📥 Response status:', response.status);
                         if (response.ok) {
                             const data = await response.json();
+                            console.log('📥 Loaded data:', data);
                             if (data.events) {
                                 this.events = data.events;
+                                console.log('✅ Events updated:', this.events.map(e => e.status));
                             }
+                        } else {
+                            console.error('❌ Response not OK:', response.status, response.statusText);
                         }
                     } catch (e) {
-                        console.error('Failed to load state:', e);
+                        console.error('❌ Failed to load state:', e.message);
                     }
                 },
 
                 async saveState() {
+                    console.log('📤 Saving state to:', BLOB_URL);
+                    console.log('📤 Events to save:', this.events.map(e => e.status));
                     try {
-                        await fetch(BLOB_URL, {
+                        const response = await fetch(BLOB_URL, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ events: this.events })
                         });
+                        console.log('📤 Save response:', response.status);
+                        if (!response.ok) {
+                            console.error('❌ Save failed:', response.status, response.statusText);
+                        }
                     } catch (e) {
-                        console.error('Failed to save state:', e);
+                        console.error('❌ Failed to save state:', e.message);
                     }
                 },
 
