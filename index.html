@@ -204,7 +204,8 @@
 
         // Fixed JSONBlob ID - shared by all users
         const BLOB_ID = '019b5dee-ba4a-73f4-bb6b-51e025c9aa86';
-        const BLOB_URL = `https://jsonblob.com/api/jsonBlob/${BLOB_ID}`;
+        const CORS_PROXY = 'https://corsproxy.io/?';
+        const BLOB_URL = `${CORS_PROXY}${encodeURIComponent(`https://jsonblob.com/api/jsonBlob/${BLOB_ID}`)}`;
 
         function eventApp() {
             return {
