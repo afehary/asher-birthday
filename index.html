@@ -186,12 +186,20 @@
                         <template x-for="(subEvent, subIndex) in event.subEvents" :key="subIndex">
                             <div
                                 :class="{
-                                    'text-gray-400': event.status === 'completed',
-                                    'text-gray-700': event.status !== 'completed'
+                                    'bg-gray-100 text-gray-400': event.status === 'completed',
+                                    'bg-white/60 text-gray-700': event.status !== 'completed'
                                 }"
-                                class="flex items-start gap-2 text-sm"
+                                class="flex items-center gap-3 text-sm px-3 py-2 rounded-xl"
                             >
-                                <span class="text-xs mt-0.5">•</span>
+                                <span
+                                    :class="{
+                                        'bg-gray-300 text-gray-500': event.status === 'completed',
+                                        'bg-teal-500 text-white': event.status === 'ongoing',
+                                        'bg-gray-200 text-gray-500': event.status === 'pending'
+                                    }"
+                                    class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold"
+                                    x-text="subIndex + 1"
+                                ></span>
                                 <span x-text="subEvent"></span>
                             </div>
                         </template>
