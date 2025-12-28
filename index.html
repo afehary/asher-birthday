@@ -221,8 +221,8 @@
             🎤 MC Mode Active
         </div>
 
-        <!-- Event List -->
-        <div class="space-y-3">
+        <!-- Event List (hidden when all complete) -->
+        <div class="space-y-3" x-show="!events.every(e => e.status === 'completed')">
             <template x-for="(event, index) in events" :key="index">
                 <div
                     @click="toggleExpand(index)"
@@ -331,18 +331,18 @@
             x-transition:enter="transition ease-out duration-500"
             x-transition:enter-start="opacity-0 scale-90"
             x-transition:enter-end="opacity-100 scale-100"
-            class="text-center py-10 my-6 bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg"
+            class="text-center py-12 my-6 bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg"
         >
-            <div class="text-6xl mb-4">🎉</div>
-            <h2 class="text-2xl font-bold mb-2" style="color: #3F9AAE;">Thank You for Celebrating!</h2>
-            <p class="text-gray-600 text-lg mb-2">Asher's 1st Birthday Party has ended</p>
-            <p class="text-gray-500">We hope you had a wonderful time!</p>
-            <div class="flex justify-center gap-3 mt-4 text-3xl">
+            <div class="text-7xl mb-6">🎁</div>
+            <h2 class="text-3xl font-bold mb-4" style="color: #3F9AAE;">The Party Has Ended!</h2>
+            <p class="text-gray-600 text-xl mb-2">But Asher is still accepting gifts.</p>
+            <p class="text-gray-500 text-lg italic">Just saying...</p>
+            <div class="flex justify-center gap-4 mt-6 text-4xl">
                 <span>🎂</span>
                 <span>🎈</span>
-                <span>🎁</span>
-                <span>❤️</span>
+                <span>🎉</span>
             </div>
+            <p class="text-gray-400 mt-6 text-sm">Thank you for celebrating Asher's 1st Birthday!</p>
         </div>
 
         <!-- Admin Reset All Button -->
