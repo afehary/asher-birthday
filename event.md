@@ -3,7 +3,12 @@ Order of Events – Asher Turns ONE 🎂
 	•	MC welcomes guests(Make everyone share their name and relationship to the celebrant)
 	•	Short opening prayer (thanksgiving for baby’s life, parents, guests)
 
-2. Baby’s Growth Video / Slideshow 
+2. Fun Icebreaker / Activity 1 
+Choose one:
+	•	“Guess Baby’s Age” using photos
+	•	Baby Trivia (first word, favorite food, birth time)
+
+3. Baby’s Growth Video / Slideshow 
 🎥 Video showing:
 	•	Pregnancy / newborn days
 	•	Monthly milestones
@@ -11,10 +16,6 @@ Order of Events – Asher Turns ONE 🎂
 	•	End with “Happy 1st Birthday!”
 (Soft background music works beautifully here)
 
-5. Fun Icebreaker / Activity 1 
-Choose one:
-	•	“Guess Baby’s Age” using photos
-	•	Baby Trivia (first word, favorite food, birth time)
 
 Small prizes make it fun 🎁
 
